@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Organizer",
+  "version": "1.0",
+  "description": "Groups tabs by domain and sorts them alphabetically. Automatically organizes new tabs as they are opened.",
+  "permissions": [
+    "tabs",
+    "tabGroups",
+    "windows",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": "icons/icon.png"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "host_permissions": ["<all_urls>"],
+  "icons": {
+    "128": "icons/icon.png"
+  }
+}

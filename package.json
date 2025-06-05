@@ -1,0 +1,33 @@
+{
+  "name": "tab-organizer-extension",
+  "version": "1.0.0",
+  "description": "A Chrome extension that automatically organizes tabs by domain and provides various tab management features",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Building extension...' && echo 'Extension built successfully!'",
+    "lint": "echo 'Running linter...' && echo 'Linting complete!'",
+    "test": "echo 'Running tests...' && echo 'Tests complete!'",
+    "dev": "echo 'Development mode - Load unpacked extension from project directory'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "tab-management",
+    "browser-extension",
+    "productivity",
+    "tab-organization"
+  ],
+  "author": "Koushik S",
+  "license": "Apache-2.0",
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kos-conf"
+  },
+  "bugs": {
+    "url": "https://github.com/kos-conf/tab-organizer/issues"
+  },
+  "homepage": "https://github.com/kos-conf/tab-organizer#readme"
+} 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tab Organizer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="../../icons/icon.png" alt="Tab Organizer">
+      <h1>Tab Organizer</h1>
+    </div>
+
+    <div class="search-container">
+      <input type="text" id="tabSearch" class="search-input" placeholder="Search tabs... (Cmd + K or Ctrl + K)">
+      <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <div class="toggle-container">
+      <label class="toggle">
+        <input type="checkbox" id="autoOrganize">
+        <span class="slider"></span>
+        <span class="label">Auto-organize new tabs</span>
+      </label>
+    </div>
+
+    <div class="section-title">Tab Actions</div>
+    <div class="action-group">
+      <button id="organize" class="action-button">Organize Tabs</button>
+    </div>
+
+    <div class="section-title">Tab Group Actions</div>
+    <div class="action-group">
+      <button id="collapseAll" class="action-button">Collapse All Groups</button>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
+
+    <button id="settingsBtn" class="action-button" style="margin-top:18px;background:#fff;color:#1a73e8;border:1px solid #1a73e8;">Settings</button>
+  </div>
+  <script type="module" src="popup.js"></script>
+</body>
+</html> 
