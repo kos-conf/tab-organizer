@@ -4,22 +4,22 @@ A powerful Chrome extension that helps you organize your tabs into groups automa
 
 ## Features
 
-- 🔍 **Quick Tab Search**: Press `Cmd + K` (Mac) or `Ctrl + K` (Windows/Linux) to instantly search through your tabs
-- 🤖 **Auto-Organization**: Automatically groups similar tabs together
-- 🎯 **Smart Grouping**: Groups tabs based on domain and content similarity
-- ⌨️ **Keyboard Shortcuts**:
+- **Quick Tab Search**: Press `Cmd + K` (Mac) or `Ctrl + K` (Windows/Linux) to instantly search through your tabs
+- **Auto-Organization**: Automatically groups similar tabs together
+- **Smart Grouping**: Groups tabs based on domain and content similarity
+- **Keyboard Shortcuts**:
   - `Cmd/Ctrl + K`: Quick search
   - `Cmd/Ctrl + O`: Organize tabs
   - `Cmd/Ctrl + E`: Toggle collapse/expand all groups
   - `Cmd/Ctrl + ,`: Open settings
-- 📊 **Tab Statistics**: View total tabs and groups at a glance
-- ⚙️ **Customizable Settings**: Configure auto-organization and grouping preferences
+- **Tab Statistics**: View total tabs and groups at a glance
+- **Customizable Settings**: Configure auto-organization and grouping preferences
 
 ## Installation
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/tab-organizer-extension.git
+git clone https://github.com/kos-conf/tab-organizer.git
 ```
 
 2. Open Chrome and navigate to `chrome://extensions/`
