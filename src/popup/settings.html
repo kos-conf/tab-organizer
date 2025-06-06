@@ -64,7 +64,7 @@
     }
     .settings-main {
       flex: 1;
-      padding: 40px 40px 40px 40px;
+      padding: 40px;
       background: #f8fafc;
       min-height: 100vh;
       box-sizing: border-box;
@@ -87,26 +87,37 @@
       background: #1a73e8;
       color: #fff;
       border: none;
-      border-radius: 6px;
-      padding: 8px 20px;
+      border-radius: 8px;
+      padding: 10px 24px;
       font-size: 15px;
       font-weight: 500;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .add-rule-btn:hover {
       background: #1557b0;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(26,115,232,0.2);
+    }
+    .add-rule-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
     }
     .rules-table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0;
       background: #fff;
-      border-radius: 10px;
+      border-radius: 12px;
       box-shadow: 0 1px 4px rgba(60,64,67,0.06);
       overflow: hidden;
     }
     .rules-table th, .rules-table td {
-      padding: 12px 16px;
+      padding: 16px;
       text-align: left;
     }
     .rules-table th {
@@ -120,19 +131,28 @@
       font-size: 15px;
       color: #444;
       border-bottom: 1px solid #f1f3f4;
+      vertical-align: middle;
     }
     .rules-table tr:last-child td {
       border-bottom: none;
     }
     .action-btn {
       border: none;
-      border-radius: 4px;
-      padding: 6px 14px;
+      border-radius: 6px;
+      padding: 8px 12px;
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
       margin-right: 8px;
-      transition: background 0.2s, color 0.2s;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .action-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
     }
     .edit-btn {
       background: #e8f0fe;
@@ -140,6 +160,7 @@
     }
     .edit-btn:hover {
       background: #d2e3fc;
+      transform: translateY(-1px);
     }
     .delete-btn {
       background: #fde8e8;
@@ -147,12 +168,242 @@
     }
     .delete-btn:hover {
       background: #fbcaca;
+      transform: translateY(-1px);
     }
     .empty-table {
       color: #888;
       text-align: center;
-      padding: 32px 0;
+      padding: 48px 0;
       font-size: 15px;
+    }
+    .rule-form {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .form-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(60,64,67,0.08);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .form-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .back-btn:hover {
+      background: #f1f3f4;
+    }
+    .back-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #1a73e8;
+    }
+    .form-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a73e8;
+      margin: 0;
+    }
+    .form-group {
+      margin-bottom: 24px;
+    }
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #333;
+      transition: all 0.2s;
+      background: #fff;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 2px rgba(26,115,232,0.1);
+    }
+    .form-input::placeholder {
+      color: #888;
+    }
+    .form-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .form-col {
+      flex: 1;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: #1a73e8;
+    }
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(16px);
+    }
+    .conditions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .condition-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+    .condition-item select {
+      flex: 0 0 140px;
+    }
+    .condition-item input {
+      flex: 1;
+    }
+    .remove-condition {
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 6px;
+      color: #d93025;
+      transition: all 0.2s;
+    }
+    .remove-condition:hover {
+      background: #fde8e8;
+    }
+    .remove-condition svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+    .add-condition {
+      background: #e8f0fe;
+      color: #1a73e8;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .add-condition:hover {
+      background: #d2e3fc;
+      transform: translateY(-1px);
+    }
+    .add-condition svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .cancel-btn {
+      background: #f1f3f4;
+      color: #333;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cancel-btn:hover {
+      background: #e0e0e0;
+    }
+    .save-btn {
+      background: #1a73e8;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .save-btn:hover {
+      background: #1557b0;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(26,115,232,0.2);
+    }
+    .save-btn:disabled {
+      background: #b6c6e3;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .error-msg {
+      color: #d93025;
+      font-size: 13px;
+      margin-top: 4px;
+      display: none;
+    }
+    .input-error {
+      border-color: #d93025 !important;
+    }
+    .input-error:focus {
+      box-shadow: 0 0 0 2px rgba(217,48,37,0.1) !important;
     }
   </style>
 </head>
@@ -168,7 +419,10 @@
     <div class="settings-main" id="settingsMain">
       <div class="settings-header-row">
         <h2 class="settings-title">Rules</h2>
-        <button class="add-rule-btn" id="addRuleBtn">Add Rule</button>
+        <button class="add-rule-btn" id="addRuleBtn">
+          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          Add Rule
+        </button>
       </div>
       <table class="rules-table">
         <thead>

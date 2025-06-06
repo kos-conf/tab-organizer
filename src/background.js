@@ -84,9 +84,7 @@ chrome.windows.onFocusChanged.addListener(async (windowId) => {
 
     // Only organize if there are ungrouped tabs
     if (ungroupedTabs.length > 0) {
-      for (const tab of ungroupedTabs) {
-        await organizeTab(tab.id, windowId);
-      }
+      await TabService.organizeAllTabs();
     }
   } catch (error) {
     console.error('Error organizing window tabs:', error);

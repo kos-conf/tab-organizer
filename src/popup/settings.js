@@ -85,7 +85,7 @@ function showRulesTable() {
   `;
   document.getElementById('addRuleBtn').addEventListener('click', () => showAddRuleForm());
   document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', (e) => {
-    const idx = parseInt(e.target.getAttribute('data-idx'));
+    const idx = parseInt(e.target.closest('.edit-btn').getAttribute('data-idx'));
     showAddRuleForm(rulesCache[idx], idx);
   }));
   document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', async (e) => {
@@ -113,129 +113,152 @@ function showAddRuleForm(rule = null, editIdx = null) {
         conditionValue: ''
       }];
 
+  // Store form state
+  let formState = {
+    ruleName: rule ? rule.ruleName : '',
+    action: rule ? rule.action : 'group',
+    groupColor: rule ? rule.groupColor : '',
+    enabled: rule ? rule.enabled !== false : true
+  };
+
   renderForm();
 
   function renderForm() {
     main.innerHTML = `
-      <style>
-        .card { background: #fff; border-radius: 16px; box-shadow: 0 2px 8px rgba(60,64,67,0.08); padding: 32px 28px 24px 28px; margin-bottom: 28px; max-width: 520px; }
-        .card-title { font-size: 18px; font-weight: 600; margin-bottom: 18px; color: #222; }
-        .form-label { display:block; margin-bottom: 8px; font-weight: 500; color: #333; }
-        .form-input, .form-select { width: 100%; padding: 10px 12px; border-radius: 7px; border: 1px solid #dadce0; font-size: 15px; margin-bottom: 18px; box-sizing: border-box; }
-        .form-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
-        .toggle-switch { position: relative; display: inline-block; width: 38px; height: 22px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 22px; }
-        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        .toggle-switch input:checked + .toggle-slider { background-color: #1a73e8; }
-        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(16px); }
-        .add-btn { background: #1a73e8; color: #fff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
-        .add-btn:hover { background: #1557b0; }
-        .remove-cond-btn { background: #fde8e8; color: #d93025; border: none; border-radius: 6px; padding: 6px 12px; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
-        .remove-cond-btn:hover { background: #fbcaca; }
-        .save-btn { background: #1a73e8; color: #fff; border: none; border-radius: 6px; padding: 12px 0; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; width: 180px; margin: 24px auto 0 auto; display: block; }
-        .save-btn:disabled { background: #b6c6e3; color: #f1f3f4; cursor: not-allowed; }
-        .back-row { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-        .back-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; background: none; padding: 0; }
-        .back-icon svg { width: 22px; height: 22px; fill: #1a73e8; }
-        .conditions-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #222; }
-        .form-section { margin-bottom: 32px; }
-        .error-msg { color: #d93025; font-size: 13px; margin-top: -12px; margin-bottom: 12px; }
-        .input-error { border-color: #d93025 !important; }
-      </style>
-      <div class="back-row">
-        <button class="back-icon" id="backToRules" title="Back">
-          <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-        </button>
-        <h2 class="settings-title" style="margin:0;font-size:22px;font-weight:600;">${editIdx !== null ? 'Edit Rule' : 'Add Rule'}</h2>
-      </div>
-      <form id="addRuleForm" autocomplete="off">
-        <div class="card form-section">
-          <div class="card-title">General Settings</div>
-          <label class="form-label">Rule Name
-            <input type="text" name="ruleName" class="form-input" required placeholder="E.g. Shopping" value="${rule ? rule.ruleName : ''}">
-            <div class="error-msg" id="ruleNameError" style="display:none;">Rule name is required</div>
-          </label>
-          <label class="form-label">Action
-            <select name="action" class="form-select" required>
-              <option value="group" selected>Group tabs</option>
-            </select>
-          </label>
-          <label class="form-label">Tab Group Color
-            <select name="groupColor" class="form-select">
-              <option value="">Default</option>
-              <option value="grey">Grey</option>
-              <option value="blue">Blue</option>
-              <option value="red">Red</option>
-              <option value="yellow">Yellow</option>
-              <option value="green">Green</option>
-              <option value="pink">Pink</option>
-              <option value="purple">Purple</option>
-              <option value="cyan">Cyan</option>
-              <option value="orange">Orange</option>
-              <option value="teal">Teal</option>
-              <option value="lime">Lime</option>
-              <option value="indigo">Indigo</option>
-              <option value="brown">Brown</option>
-              <option value="black">Black</option>
-              <option value="white">White</option>
-            </select>
-          </label>
-          <label class="form-label" style="display:flex;align-items:center;gap:12px;">Enabled
-            <span class="toggle-switch">
-              <input type="checkbox" name="enabled" id="enabledToggle" ${!rule || rule.enabled !== false ? 'checked' : ''}>
-              <span class="toggle-slider"></span>
-            </span>
-          </label>
+      <div class="rule-form">
+        <div class="form-header">
+          <button class="back-btn" id="backToRules" title="Back">
+            <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+          </button>
+          <h2 class="form-title">${editIdx !== null ? 'Edit Rule' : 'Add New Rule'}</h2>
         </div>
-        <div class="card form-section">
-          <div class="conditions-title">Conditions</div>
-          <div id="conditionsList">
-            ${conditions.map((cond, i) => `
-              <div class="form-row" data-cond-idx="${i}">
-                <select class="form-select cond-type" style="max-width:120px;">
-                  <option value="hostname" ${cond.conditionType==='hostname' ? 'selected' : ''}>hostname</option>
-                  <option value="url" ${cond.conditionType==='url' ? 'selected' : ''}>url</option>
-                  <option value="title" ${cond.conditionType==='title' ? 'selected' : ''}>title</option>
-                </select>
-                <select class="form-select cond-match" style="max-width:120px;">
-                  <option value="contains" ${cond.matchType==='contains' ? 'selected' : ''}>contains</option>
-                  <option value="not_contains" ${cond.matchType==='not_contains' ? 'selected' : ''}>not contains</option>
-                </select>
-                <input type="text" class="form-input cond-value" style="flex:1;" required placeholder="E.g. amazon" value="${cond.conditionValue}">
-                ${conditions.length > 1 ? `<button type="button" class="remove-cond-btn" data-remove-idx="${i}">Remove</button>` : ''}
-              </div>
-            `).join('')}
+        <form id="addRuleForm" autocomplete="off">
+          <div class="form-card">
+            <div class="form-group">
+              <label class="form-label">Rule Name</label>
+              <input type="text" name="ruleName" class="form-input" required placeholder="E.g. Shopping" value="${formState.ruleName}">
+              <div class="error-msg" id="ruleNameError">Rule name is required</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Action</label>
+              <select name="action" class="form-select" required>
+                <option value="group" ${formState.action === 'group' ? 'selected' : ''}>Group tabs</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tab Group Color</label>
+              <select name="groupColor" class="form-select">
+                <option value="" ${formState.groupColor === '' ? 'selected' : ''}>Default</option>
+                <option value="grey" ${formState.groupColor === 'grey' ? 'selected' : ''}>Grey</option>
+                <option value="blue" ${formState.groupColor === 'blue' ? 'selected' : ''}>Blue</option>
+                <option value="red" ${formState.groupColor === 'red' ? 'selected' : ''}>Red</option>
+                <option value="yellow" ${formState.groupColor === 'yellow' ? 'selected' : ''}>Yellow</option>
+                <option value="green" ${formState.groupColor === 'green' ? 'selected' : ''}>Green</option>
+                <option value="pink" ${formState.groupColor === 'pink' ? 'selected' : ''}>Pink</option>
+                <option value="purple" ${formState.groupColor === 'purple' ? 'selected' : ''}>Purple</option>
+                <option value="cyan" ${formState.groupColor === 'cyan' ? 'selected' : ''}>Cyan</option>
+                <option value="orange" ${formState.groupColor === 'orange' ? 'selected' : ''}>Orange</option>
+                <option value="teal" ${formState.groupColor === 'teal' ? 'selected' : ''}>Teal</option>
+                <option value="lime" ${formState.groupColor === 'lime' ? 'selected' : ''}>Lime</option>
+                <option value="indigo" ${formState.groupColor === 'indigo' ? 'selected' : ''}>Indigo</option>
+                <option value="brown" ${formState.groupColor === 'brown' ? 'selected' : ''}>Brown</option>
+                <option value="black" ${formState.groupColor === 'black' ? 'selected' : ''}>Black</option>
+                <option value="white" ${formState.groupColor === 'white' ? 'selected' : ''}>White</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" style="display:flex;align-items:center;gap:12px;">
+                Enabled
+                <span class="toggle-switch">
+                  <input type="checkbox" name="enabled" id="enabledToggle" ${formState.enabled ? 'checked' : ''}>
+                  <span class="toggle-slider"></span>
+                </span>
+              </label>
+            </div>
           </div>
-          <div class="error-msg" id="condError" style="display:none;">All condition values are required</div>
-          <button type="button" class="add-btn" id="addCondBtn" style="margin-top:8px;">+ Add</button>
-        </div>
-        <input type="hidden" name="groupName" value="${rule ? rule.groupName : ''}">
-        <button type="submit" class="save-btn" id="saveBtn" disabled>Save</button>
-      </form>
+
+          <div class="form-card">
+            <div class="form-group">
+              <label class="form-label">Conditions</label>
+              <div class="conditions-list" id="conditionsList">
+                ${conditions.map((cond, i) => `
+                  <div class="condition-item" data-cond-idx="${i}">
+                    <select class="form-select cond-type">
+                      <option value="hostname" ${cond.conditionType==='hostname' ? 'selected' : ''}>hostname</option>
+                      <option value="url" ${cond.conditionType==='url' ? 'selected' : ''}>url</option>
+                      <option value="title" ${cond.conditionType==='title' ? 'selected' : ''}>title</option>
+                    </select>
+                    <select class="form-select cond-match">
+                      <option value="contains" ${cond.matchType==='contains' ? 'selected' : ''}>contains</option>
+                      <option value="not_contains" ${cond.matchType==='not_contains' ? 'selected' : ''}>not contains</option>
+                    </select>
+                    <input type="text" class="form-input cond-value" required placeholder="E.g. amazon" value="${cond.conditionValue}">
+                    ${conditions.length > 1 ? `
+                      <button type="button" class="remove-condition" data-remove-idx="${i}" title="Remove condition">
+                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                      </button>
+                    ` : ''}
+                  </div>
+                `).join('')}
+              </div>
+              <div class="error-msg" id="condError">All condition values are required</div>
+              <button type="button" class="add-condition" id="addCondBtn">
+                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                Add Condition
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+            <button type="submit" class="save-btn" id="saveBtn" disabled>Save Rule</button>
+          </div>
+        </form>
+      </div>
     `;
+
     document.getElementById('backToRules').onclick = loadAndShowRules;
+    document.getElementById('cancelBtn').onclick = loadAndShowRules;
     document.getElementById('addCondBtn').onclick = () => {
       conditions.push({ conditionType: 'hostname', matchType: 'contains', conditionValue: '' });
       renderForm();
     };
-    document.querySelectorAll('.remove-cond-btn').forEach(btn => {
+
+    document.querySelectorAll('.remove-condition').forEach(btn => {
       btn.onclick = (e) => {
-        const idx = parseInt(btn.getAttribute('data-remove-idx'));
+        const idx = parseInt(e.target.closest('.condition-item').getAttribute('data-cond-idx'));
         conditions.splice(idx, 1);
         renderForm();
       };
     });
+
     // Sync changes from UI to conditions array
-    document.querySelectorAll('.form-row').forEach((row, i) => {
+    document.querySelectorAll('.condition-item').forEach((row, i) => {
       row.querySelector('.cond-type').onchange = (e) => { conditions[i].conditionType = e.target.value; };
       row.querySelector('.cond-match').onchange = (e) => { conditions[i].matchType = e.target.value; };
       row.querySelector('.cond-value').oninput = (e) => { conditions[i].conditionValue = e.target.value; validate(); };
     });
+
     const form = document.getElementById('addRuleForm');
     const saveBtn = document.getElementById('saveBtn');
     const condError = document.getElementById('condError');
     const ruleNameError = document.getElementById('ruleNameError');
+
+    // Update form state when inputs change
+    form.ruleName.addEventListener('input', (e) => {
+      formState.ruleName = e.target.value;
+      validate();
+    });
+    form.action.addEventListener('change', (e) => {
+      formState.action = e.target.value;
+    });
+    form.groupColor.addEventListener('change', (e) => {
+      formState.groupColor = e.target.value;
+    });
+    form.enabled.addEventListener('change', (e) => {
+      formState.enabled = e.target.checked;
+    });
+
     function validate() {
       const ruleName = form.ruleName.value.trim();
       const allFilled = conditions.every(c => c.conditionValue.trim());
@@ -246,22 +269,23 @@ function showAddRuleForm(rule = null, editIdx = null) {
       document.querySelectorAll('.cond-value').forEach((input, i) => {
         input.classList.toggle('input-error', !conditions[i].conditionValue.trim());
       });
+      return saveBtn.disabled;
     }
-    form.ruleName.addEventListener('input', validate);
+
     validate();
-    form.onsubmit = async function(e) {
+
+    form.onsubmit = async (e) => {
       e.preventDefault();
+      if (!validate()) return;
+
       const newRule = {
-        ruleName: form.ruleName.value,
-        conditions: conditions.map(c => ({
-          conditionType: c.conditionType,
-          matchType: c.matchType,
-          conditionValue: c.conditionValue.trim().toLowerCase()
-        })),
-        groupName: form.ruleName.value,
-        enabled: form.enabled.checked,
-        groupColor: form.groupColor.value
+        ruleName: formState.ruleName,
+        action: formState.action,
+        enabled: formState.enabled,
+        conditions: conditions,
+        groupColor: formState.groupColor
       };
+
       if (editIdx !== null) {
         await StorageService.updateRule(editIdx, newRule);
       } else {
